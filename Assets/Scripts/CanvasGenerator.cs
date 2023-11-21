@@ -15,6 +15,7 @@ public class CanvasGenerator : MonoBehaviour
     [SerializeField] private int width = 128;
     [SerializeField] private int height = 72;
     [SerializeField] private float updateRate = 10f;
+    [SerializeField] private int brushSize = 0;
     private int[,] canvas;
     private int[,] currentState;
     private int pixelsPerUnit = 108; // Not 100! This makes the pointer more precise. I dunno why D:
@@ -34,7 +35,7 @@ public class CanvasGenerator : MonoBehaviour
 
             try
             {
-                canvas[pointedCoords[0], pointedCoords[1]] = 1;
+                paint(pointedCoords, 1, brushSize);
             }
             catch (Exception) { }
         }
@@ -46,7 +47,7 @@ public class CanvasGenerator : MonoBehaviour
 
             try
             {
-                canvas[pointedCoords[0], pointedCoords[1]] = 0;
+                paint(pointedCoords, 0, brushSize);
             }
             catch (Exception) { print("Pointing out of the canvas!"); }
         }
@@ -231,6 +232,13 @@ public class CanvasGenerator : MonoBehaviour
 
                     Gizmos.DrawCube(pos * scale, Vector3.one * scale);
                 }
+    }
+
+    private void paint(int[] coords, int value, int brushSize)
+    {
+        for (int x = -brushSize; x <= brushSize; x++ )
+            for (int y = -brushSize; y <= brushSize; y++)
+                canvas[coords[0] + x,coords[1] + y] = value;
     }
 
 }
